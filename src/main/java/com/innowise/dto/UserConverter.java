@@ -18,15 +18,15 @@ public class UserConverter {
     @EJB
     private AuthorizationRepository authorizationRepository;
 
-    public User toEntity(UserDto userDTO) {
+    public User toEntity(UserDto userDto) {
         User user = User.builder()
-                .id(userDTO.getId())
-                .username(userDTO.getUsername())
-                .password(userDTO.getPassword())
+                .id(userDto.getId())
+                .username(userDto.getUsername())
+                .password(userDto.getPassword())
                 .build();
-        Optional.ofNullable(userDTO.getAuthorityId())
+        Optional.ofNullable(userDto.getAuthorityId())
                 .ifPresent(id -> {
-                    Authorization au = authorizationRepository.findById(userDTO.getAuthorityId());
+                    Authorization au = authorizationRepository.findById(userDto.getAuthorityId());
                     user.setAuthority(au);
                 });
 
