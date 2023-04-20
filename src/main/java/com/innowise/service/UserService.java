@@ -8,7 +8,7 @@ import java.util.List;
 
 @Local
 public interface UserService {
-    //    UserDetails loadUserByUsername(String username);
+
     UserDto addUser(UserDto user);
 
     void deleteById(Long id);

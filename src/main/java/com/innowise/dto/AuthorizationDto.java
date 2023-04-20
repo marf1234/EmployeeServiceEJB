@@ -13,13 +13,26 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 public class AuthorizationDto {
-
+    /**
+     * The unique ID of the authorization.
+     */
     private Long id;
 
+    /**
+     * The name of the authorization.
+     */
     private String name;
 
+    /**
+     * The list of UserDto instances associated with this authorization.
+     */
     private List<UserDto> users;
 
+    /**
+     * Adds a UserDto instance to the list of users associated with this authorization.
+     *
+     * @param user the UserDto instance to be added
+     */
     public void addUser(UserDto user) {
         if (users == null) {
             users = new ArrayList<>();
@@ -27,18 +40,3 @@ public class AuthorizationDto {
         users.add(user);
     }
 }
-//@Data
-//@AllArgsConstructor
-//@Builder
-//public class AuthorizationDto {
-//
-//    private Long id;
-//
-//    private String name;
-//
-//    private List<UserDto> users = new ArrayList<>();
-//
-//    public void addUser(UserDto user) {
-//        this.users.add(user);
-//    }
-//}

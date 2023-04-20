@@ -19,7 +19,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Registration {
+
+/**
+
+ A class representing the registration of a new user.
+ */ public class Registration {
 
     /**
      * The username of the user being registered.

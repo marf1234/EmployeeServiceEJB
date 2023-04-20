@@ -12,14 +12,27 @@ import lombok.NoArgsConstructor;
 
 import java.util.List;
 
+/**
+ * This class implements the EmployeeRepository interface and provides
+ * <p>
+ * methods to interact with the employee table in the database.
+ */
 @Stateless
 @NoArgsConstructor
 @AllArgsConstructor
 public class EmployeeRepositoryImpl implements EmployeeRepository {
 
+    /**
+     * The entity manager used to manage entities.
+     */
     @PersistenceContext(unitName = "EmployeeServicePersistenceProvider")
     private EntityManager entityManager;
 
+    /**
+     * Returns a list of all employees in the database.
+     *
+     * @return a list of all employees
+     */
     @Override
     @Transactional
     public List<Employee> findAll() {
@@ -27,6 +40,12 @@ public class EmployeeRepositoryImpl implements EmployeeRepository {
         return query.getResultList();
     }
 
+    /**
+     * Saves an employee to the database.
+     *
+     * @param employee the employee to be saved
+     * @return the saved employee
+     */
     @Override
     public Employee save(Employee employee) {
         Employee newEmployee = entityManager.merge(employee);
@@ -34,46 +53,26 @@ public class EmployeeRepositoryImpl implements EmployeeRepository {
         return newEmployee;
     }
 
+    /**
+     * Finds an employee in the database by their ID.
+     *
+     * @param id the ID of the employee to be found
+     * @return the employee with the specified ID, or null if not found
+     */
     @Override
     public Employee findById(Long id) {
         return entityManager.find(Employee.class, id);
     }
 
+    /**
+     * Deletes an employee from the database by their ID.
+     *
+     * @param id the ID of the employee to be deleted
+     */
     @Override
     public void deleteById(Long id) {
-        Query query = entityManager.createQuery("delete from Employee " +
-                "where id =:employeeId");
+        Query query = entityManager.createQuery("delete from Employee " + "where id =:employeeId");
         query.setParameter("employeeId", id);
         query.executeUpdate();
     }
 }
-//@Stateless
-//public class EmployeeRepositoryImpl implements EmployeeRepository {
-//
-//    @PersistenceContext(unitName = "EmployeeServicePersistenceProvider")
-//    private EntityManager entityManager;
-//
-//    @Override
-//    public List<Employee> findAll() {
-//        return entityManager.createQuery("SELECT e FROM Employee e", Employee.class).getResultList();
-//    }
-//
-//    @Override
-//    public Employee save(Employee employee) {
-//        entityManager.persist(employee);
-//        return employee;
-//    }
-//
-//    @Override
-//    public Employee findById(Long id) {
-//        return entityManager.find(Employee.class, id);
-//    }
-//
-//    @Override
-//    public void deleteById(Long id) {
-//        Employee employee = entityManager.find(Employee.class, id);
-//        if (employee != null) {
-//            entityManager.remove(employee);
-//        }
-//    }
-//}

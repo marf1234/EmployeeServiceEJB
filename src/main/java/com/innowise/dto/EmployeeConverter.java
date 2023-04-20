@@ -9,104 +9,63 @@ import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
 import java.util.Optional;
+
+/**
+ * The EmployeeConverter class is responsible for converting EmployeeDto objects to Employee entities and vice versa.
+ */
 @Stateless
 @AllArgsConstructor
 @NoArgsConstructor
 public class EmployeeConverter {
 
-        @EJB
-        private DepartmentRepository departmentRepository;
+    @EJB
+    private DepartmentRepository departmentRepository;
 
-        public Employee toEntity(EmployeeDto employeeDTO) {
-            Employee employee = Employee.builder()
-                    .id(employeeDTO.getId())
-                    .name(employeeDTO.getName())
-                    .salary(employeeDTO.getSalary())
-                    .build();
+    /**
+     * Converts an EmployeeDto object to an Employee entity.
+     *
+     * @param employeeDTO the EmployeeDto object to convert
+     * @return an Employee entity representing the given EmployeeDto object
+     */
+    public Employee toEntity(EmployeeDto employeeDTO) {
+        Employee employee = Employee.builder().id(employeeDTO.getId()).name(employeeDTO.getName()).salary(employeeDTO.getSalary()).build();
 
-            Optional.ofNullable(employeeDTO.getDepartmentId())
-                    .ifPresent(id -> {
-                        Department department = departmentRepository.findById(employeeDTO.getDepartmentId())
-//                            .orElseThrow(() -> new NoSuchRecordException
-//                                    (String.format("Department with id=%s not found", employeeDTO.getDepartmentId()))
-//                            )
-                                ;
-                        employee.setDepartment(department);
-                    });
+        Optional.ofNullable(employeeDTO.getDepartmentId()).ifPresent(id -> {
+            Department department = departmentRepository.findById(employeeDTO.getDepartmentId());
+            employee.setDepartment(department);
+        });
 
-            return employee;
-        }
+        return employee;
+    }
 
-        public void updateEmployeeFields(EmployeeDto employeeDTO, Employee employee) {
-            employee.setName(employeeDTO.getName());
-            employee.setSalary(employeeDTO.getSalary());
-            if (employeeDTO.getDepartmentId() != null) {
-                Department department = departmentRepository.findById(employeeDTO.getDepartmentId())
-//                    .orElseThrow(() -> new NoSuchRecordException
-//                            (String.format("Department with id=%s not found", employeeDTO.getDepartmentId()))
-//                    )
-                        ;
-                employee.setDepartment(department);
-            } else {
-                employee.setDepartment(null);
-            }
-        }
-
-        public EmployeeDto toDTO(Employee employee) {
-            EmployeeDto employeeDTO = EmployeeDto.builder()
-                    .id(employee.getId())
-                    .name(employee.getName())
-                    .salary(employee.getSalary())
-                    .build();
-            System.out.println(employeeDTO);
-            Optional.ofNullable(employee.getDepartment())
-                    .ifPresent(department -> employeeDTO.setDepartmentId(department.getId()));
-
-            return employeeDTO;
+    /**
+     * Updates the fields of an existing Employee entity with the values of an EmployeeDto object.
+     *
+     * @param employeeDTO the EmployeeDto object containing the new values for the Employee entity
+     * @param employee    the existing Employee entity to update
+     */
+    public void updateEmployeeFields(EmployeeDto employeeDTO, Employee employee) {
+        employee.setName(employeeDTO.getName());
+        employee.setSalary(employeeDTO.getSalary());
+        if (employeeDTO.getDepartmentId() != null) {
+            Department department = departmentRepository.findById(employeeDTO.getDepartmentId());
+            employee.setDepartment(department);
+        } else {
+            employee.setDepartment(null);
         }
     }
-    //public class EmployeeConverter {
-//    private DepartmentRepository departmentRepository;
-//
-//    public Employee convertToEntity(EmployeeDTO employeeDTO) {
-//        Employee employee = Employee.builder()
-//                .id(employeeDTO.getId())
-//                .name(employeeDTO.getName())
-//                .surname(employeeDTO.getSurname())
-//                .salary(employeeDTO.getSalary())
-//                .build();
-//
-//        Optional.ofNullable(employeeDTO.getDepartmentId())
-//                .map(departmentRepository::findById)
-//                .ifPresent(employee::setDepartment);
-//
-//        return employee;
-//    }
-//
-//    public void updateEmployeeFields(EmployeeDTO employeeDTO, Employee employee) {
-//        employee.setName(employeeDTO.getName());
-//        employee.setSurname(employeeDTO.getSurname());
-//        employee.setSalary(employeeDTO.getSalary());
-//        if (employeeDTO.getDepartmentId() != null) {
-//            departmentRepository.findById(employeeDTO.getDepartmentId())
-//                    .ifPresent(employee::setDepartment);
-//        } else {
-//            employee.setDepartment(null);
-//        }
-//    }
-//
-//    public EmployeeDTO convertToDTO(Employee employee) {
-//        EmployeeDTO employeeDTO = EmployeeDTO.builder()
-//                .id(employee.getId())
-//                .name(employee.getName())
-//                .surname(employee.getSurname())
-//                .salary(employee.getSalary())
-//                .build();
-//
-//        Optional.ofNullable(employee.getDepartment())
-//                .map(Department::getId)
-//                .ifPresent(employeeDTO::setDepartmentId);
-//
-//        return employeeDTO;
-//    }
-//}
+
+    /**
+     * Converts an Employee entity to an EmployeeDto object.
+     *
+     * @param employee the Employee entity to convert
+     * @return an EmployeeDto object representing the given Employee entity
+     */
+    public EmployeeDto toDTO(Employee employee) {
+        EmployeeDto employeeDTO = EmployeeDto.builder().id(employee.getId()).name(employee.getName()).salary(employee.getSalary()).build();
+
+        Optional.ofNullable(employee.getDepartment()).ifPresent(department -> employeeDTO.setDepartmentId(department.getId()));
+
+        return employeeDTO;
+    }
+}

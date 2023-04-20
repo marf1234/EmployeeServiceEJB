@@ -10,6 +10,9 @@ import lombok.NoArgsConstructor;
 
 import java.util.Optional;
 
+/**
+ * Converter class for converting between User and UserDto instances.
+ */
 @Stateless
 @NoArgsConstructor
 @AllArgsConstructor
@@ -18,6 +21,12 @@ public class UserConverter {
     @EJB
     private AuthorizationRepository authorizationRepository;
 
+    /**
+     * Converts a UserDto instance to a User entity.
+     *
+     * @param userDto the UserDto instance to convert
+     * @return the converted User entity
+     */
     public User toEntity(UserDto userDto) {
         User user = User.builder()
                 .id(userDto.getId())
@@ -33,6 +42,12 @@ public class UserConverter {
         return user;
     }
 
+    /**
+     * Converts a User entity to a UserDto instance.
+     *
+     * @param user the User entity to convert
+     * @return the converted UserDto instance
+     */
     public UserDto toDTO(User user) {
         UserDto userDTO = UserDto.builder()
                 .id(user.getId())
@@ -46,31 +61,3 @@ public class UserConverter {
         return userDTO;
     }
 }
-//@Stateless
-//public class UserConverter {
-//
-//    @EJB
-//    private AuthorizationRepository authorizationRepository;
-//
-//    public User toEntity(UserDto userDTO) {
-//        return User.builder()
-//                .id(userDTO.getId())
-//                .username(userDTO.getUsername())
-//                .password(userDTO.getPassword())
-//                .authority(idToAuthority(userDTO.getAuthorityId()))
-//                .build();
-//    }
-//
-//    public UserDto toDTO(User user) {
-//        return UserDto.builder()
-//                .id(user.getId())
-//                .username(user.getUsername())
-//                .password(user.getPassword())
-//                .authorityId(Optional.ofNullable(user.getAuthority()).map(Authorization::getId).orElse(null))
-//                .build();
-//    }
-//
-//    private Authorization idToAuthority(Long id) {
-//        return id != null ? authorizationRepository.findById(id) : null;
-//    }
-//}

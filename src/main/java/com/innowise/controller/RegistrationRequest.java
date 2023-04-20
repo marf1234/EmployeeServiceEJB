@@ -15,13 +15,19 @@ import lombok.NoArgsConstructor;
 @Builder
 public class RegistrationRequest {
 
-    /** The username of the new user. */
+    /**
+     * The username of the new user.
+     */
     private String username;
 
-    /** The password of the new user. */
+    /**
+     * The password of the new user.
+     */
     private String password;
 
-    /** The authority ID of the new user. */
+    /**
+     * The authority ID of the new user.
+     */
     private Long authorityId;
 
     /**
@@ -30,10 +36,6 @@ public class RegistrationRequest {
      * @return the user DTO representation of this registration request
      */
     public UserDto toDTO() {
-        return UserDto.builder()
-                .username(username)
-                .password(password)
-                .authorityId(authorityId)
-                .build();
+        return UserDto.builder().username(username).password(password).authorityId(authorityId).build();
     }
 }

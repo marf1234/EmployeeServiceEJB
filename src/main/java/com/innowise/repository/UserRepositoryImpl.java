@@ -9,98 +9,85 @@ import lombok.NoArgsConstructor;
 
 import java.util.List;
 
+/**
+ * Implementation of UserRepository interface for managing User entities
+ */
 @Stateless
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserRepositoryImpl implements UserRepository {
+
     @PersistenceContext(unitName = "EmployeeServicePersistenceProvider")
     private EntityManager entityManager;
 
+    /**
+     * Finds all User entities in the database
+     *
+     * @return a List of User entities
+     */
     @Override
     @Transactional
     public List<User> findAll() {
         Query query = entityManager.createQuery("from User", User.class);
-        List<User> allUsers = query.getResultList();
-        return allUsers;
+        return (List<User>) query.getResultList();
     }
 
+    /**
+     * Saves a User entity to the database
+     *
+     * @param user the User entity to save
+     * @return the saved User entity
+     */
     @Override
     public User save(User user) {
         User newUser = entityManager.merge(user);
-//        newUser.setId(user.getId());
         return newUser;
     }
 
 
+    /**
+     * Finds a User entity by its ID
+     *
+     * @param id the ID of the User entity to find
+     * @return the found User entity or null if not found
+     */
     @Override
     public User findById(Long id) {
         User user = entityManager.find(User.class, id);
         return user;
     }
 
+    /**
+     * Deletes a User entity from the database by its ID
+     *
+     * @param id the ID of the User entity to delete
+     */
     @Override
     public void deleteById(Long id) {
-        Query query = entityManager.createQuery("delete from User " +
-                "where id =:userId");
+        Query query = entityManager.createQuery("delete from User " + "where id =:userId");
         query.setParameter("userId", id);
         query.executeUpdate();
     }
 
+    /**
+     * Finds a User entity by its username
+     *
+     * @param username the username of the User entity to find
+     * @return the found User entity or null if not found
+     */
     @Override
     public User findByUsername(String username) {
         TypedQuery<User> query = entityManager.createQuery("SELECT u FROM User u WHERE u.username = :username", User.class);
         User user = null;
         try {
-            if (query != null){
+            if (query != null) {
                 query.setParameter("username", username);
                 user = query.getSingleResult();
             }
         } catch (NoResultException ignored) {
 
         }
-
         return user;
     }
 
 }
-//@Stateless
-//public class UserRepositoryImpl implements UserRepository {
-//
-//    @PersistenceContext(unitName = "EmployeeServicePersistenceProvider")
-//    private EntityManager entityManager;
-//
-//    @Override
-//    public List<User> findAll() {
-//        return entityManager.createQuery("SELECT u FROM User u", User.class).getResultList();
-//    }
-//
-//    @Override
-//    public User save(User user) {
-//        entityManager.persist(user);
-//        return user;
-//    }
-//
-//    @Override
-//    public User findById(Long id) {
-//        return entityManager.find(User.class, id);
-//    }
-//
-//    @Override
-//    public void deleteById(Long id) {
-//        User user = entityManager.find(User.class, id);
-//        if (user != null) {
-//            entityManager.remove(user);
-//        }
-//    }
-//
-//    @Override
-//    public Optional<User> findByUsername(String username) {
-//        TypedQuery<User> query = entityManager.createQuery("SELECT u FROM User u WHERE u.username = :username", User.class);
-//        query.setParameter("username", username);
-//        try {
-//            return Optional.of(query.getSingleResult());
-//        } catch (NoResultException | NonUniqueResultException ex) {
-//            return Optional.empty();
-//        }
-//    }
-//}

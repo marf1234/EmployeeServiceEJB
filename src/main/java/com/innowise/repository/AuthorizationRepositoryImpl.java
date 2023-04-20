@@ -11,6 +11,10 @@ import lombok.NoArgsConstructor;
 
 import java.util.List;
 
+/**
+ * The AuthorizationRepositoryImpl class implements the AuthorizationRepository interface
+ * and provides methods for interacting with the authorization data stored in the database.
+ */
 @Stateless
 @AllArgsConstructor
 @NoArgsConstructor
@@ -18,13 +22,23 @@ public class AuthorizationRepositoryImpl implements AuthorizationRepository {
     @PersistenceContext(unitName = "EmployeeServicePersistenceProvider")
     private EntityManager entityManager;
 
+    /**
+     * Returns a list of all authorizations in the database.
+     *
+     * @return List of Authorization objects.
+     */
     @Override
     public List<Authorization> findAll() {
         TypedQuery<Authorization> query = entityManager.createQuery("from Authorization", Authorization.class);
-        List<Authorization> list = query.getResultList();
-        return list;
+        return query.getResultList();
     }
 
+    /**
+     * Saves an authorization in the database.
+     *
+     * @param authority The Authorization object to save.
+     * @return The saved Authorization object with its generated id.
+     */
     @Override
     public Authorization save(Authorization authority) {
         Authorization newAuthority = entityManager.merge(authority);
@@ -32,12 +46,22 @@ public class AuthorizationRepositoryImpl implements AuthorizationRepository {
         return newAuthority;
     }
 
+    /**
+     * Finds an authorization by its id.
+     *
+     * @param id The id of the authorization to find.
+     * @return The Authorization object with the given id or null if not found.
+     */
     @Override
     public Authorization findById(Long id) {
-        Authorization authority = entityManager.find(Authorization.class, id);
-        return authority;
+        return entityManager.find(Authorization.class, id);
     }
 
+    /**
+     * Deletes an authorization by its id.
+     *
+     * @param id The id of the authorization to delete.
+     */
     @Override
     public void deleteById(Long id) {
         Query query = entityManager.createQuery("delete from Authorization " + "where id =:authorityId");
@@ -45,51 +69,15 @@ public class AuthorizationRepositoryImpl implements AuthorizationRepository {
         query.executeUpdate();
     }
 
+    /**
+     * Finds an authorization by its name.
+     *
+     * @param name The name of the authorization to find.
+     * @return The Authorization object with the given name or null if not found.
+     */
     @Override
     public Authorization findByName(String name) {
         Query query = entityManager.createQuery("SELECT u FROM Authority u WHERE u.name = :name");
         return (Authorization) query.getSingleResult();
     }
 }
-//@Stateless
-//@AllArgsConstructor
-//public class AuthorityRepositoryImpl implements AuthorityRepository {
-//
-//    @PersistenceContext(unitName = "EmployeeServicePersistenceProvider")
-//    private EntityManager entityManager;
-//
-//    @Override
-//    public List<Authority> findAll() {
-//        return entityManager.createQuery("SELECT a FROM Authority a", Authority.class).getResultList();
-//    }
-//
-//    @Override
-//    public Authority save(Authority authority) {
-//        entityManager.persist(authority);
-//        return authority;
-//    }
-//
-//    @Override
-//    public Authority findById(Long id) {
-//        return entityManager.find(Authority.class, id);
-//    }
-//
-//    @Override
-//    public void deleteById(Long id) {
-//        Authority authority = entityManager.find(Authority.class, id);
-//        if (authority != null) {
-//            entityManager.remove(authority);
-//        }
-//    }
-//
-//    @Override
-//    public Optional<Authority> findByName(String name) {
-//        TypedQuery<Authority> query = entityManager.createQuery("SELECT a FROM Authority a WHERE a.name = :name", Authority.class);
-//        query.setParameter("name", name);
-//        try {
-//            return Optional.of(query.getSingleResult());
-//        } catch (NoResultException | NonUniqueResultException ex) {
-//            return Optional.empty();
-//        }
-//    }
-//}

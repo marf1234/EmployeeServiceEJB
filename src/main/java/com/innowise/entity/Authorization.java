@@ -8,6 +8,9 @@ import lombok.NoArgsConstructor;
 
 import java.util.List;
 
+/**
+ * Represents an authorization entity.
+ **/
 @Data
 @Table(name = "authority")
 @Entity
@@ -15,54 +18,21 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Authorization {
+    /**
+     * The unique identifier for the authorization.
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
+    /**
+     * The name of the authorization.
+     */
     @Column(name = "authority")
     private String name;
-
+    /**
+     * The users associated with the authorization.
+     */
     @OneToMany(mappedBy = "authority", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
     private List<User> users;
 }
-
-//@Entity
-//@Table(name = "authority")
-//public class Authority {
-//
-//    @Id
-//    @GeneratedValue(strategy = GenerationType.IDENTITY)
-//    private Long id;
-//
-//    @Column(name = "authority")
-//    private String name;
-//
-//    @OneToMany(mappedBy = "authority", cascade = CascadeType.REMOVE)
-//    private List<User> users;
-//
-//    public Authority() {}
-//
-//    public Authority(String name) {
-//        this.name = name;
-//    }
-//
-//    public Long getId() {
-//        return id;
-//    }
-//
-//    public String getName() {
-//        return name;
-//    }
-//
-//    public void setName(String name) {
-//        this.name = name;
-//    }
-//
-//    public List<User> getUsers() {
-//        return users;
-//    }
-//
-//    public void setUsers(List<User> users) {
-//        this.users = users;
-//    }
-//}
